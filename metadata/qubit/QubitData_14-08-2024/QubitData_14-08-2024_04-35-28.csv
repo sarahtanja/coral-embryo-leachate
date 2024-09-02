@@ -1,0 +1,4 @@
+"Run ID","Assay Name","Test Name","Test Date","Qubit tube conc.","Qubit tube conc. units","Original sample conc.","Original sample conc. units","Sample Volume (uL)","Dilution Factor","Std 1 RFU","Std 2 RFU","Std 3 RFU","Excitation","Emission","Green RFU","Far Red RFU"
+"2024-08-13_062825","RNA Broad Range","Sample_#240813-062950","13/08/2024 06:29:50 AM","Out of range","ug/mL","Out of range","ng/uL","1","200","799.68","18236.85",,"Red","Far Red",,"788.14"
+"2024-08-13_062825","RNA Broad Range","Sample_#240813-062937","13/08/2024 06:29:37 AM","Out of range","ug/mL","Out of range","ng/uL","1","200","799.68","18236.85",,"Red","Far Red",,"784.13"
+"2024-08-13_062825","RNA Broad Range","Sample_#240813-062906","13/08/2024 06:29:06 AM","Out of range","ug/mL","Out of range","ng/uL","1","200","799.68","18236.85",,"Red","Far Red",,"786.86"

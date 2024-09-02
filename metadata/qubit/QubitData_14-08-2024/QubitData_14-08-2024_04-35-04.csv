@@ -1,0 +1,7 @@
+"Run ID","Assay Name","Test Name","Test Date","Qubit tube conc.","Qubit tube conc. units","Original sample conc.","Original sample conc. units","Sample Volume (uL)","Dilution Factor","Std 1 RFU","Std 2 RFU","Std 3 RFU","Excitation","Emission","Green RFU","Far Red RFU"
+"2024-08-14_043136","RNA High Sensitivity","Sample_#240814-043403","14/08/2024 04:34:03 AM","127","ng/mL","25.4","ng/uL","1","200","99.80","1366.59",,"Red","Far Red",,"459.54"
+"2024-08-14_043136","RNA High Sensitivity","Sample_#240814-043353","14/08/2024 04:33:53 AM","58.9","ng/mL","11.8","ng/uL","1","200","99.80","1366.59",,"Red","Far Red",,"262.02"
+"2024-08-14_043136","RNA High Sensitivity","Sample_#240814-043339","14/08/2024 04:33:39 AM","103","ng/mL","20.6","ng/uL","1","200","99.80","1366.59",,"Red","Far Red",,"391.44"
+"2024-08-14_043136","RNA High Sensitivity","Sample_#240814-043315","14/08/2024 04:33:15 AM","128","ng/mL","25.6","ng/uL","1","200","99.80","1366.59",,"Red","Far Red",,"463.48"
+"2024-08-14_043136","RNA High Sensitivity","Sample_#240814-043254","14/08/2024 04:32:54 AM","60.0","ng/mL","12.0","ng/uL","1","200","99.80","1366.59",,"Red","Far Red",,"265.03"
+"2024-08-14_043136","RNA High Sensitivity","Sample_#240814-043231","14/08/2024 04:32:31 AM","104","ng/mL","20.8","ng/uL","1","200","99.80","1366.59",,"Red","Far Red",,"394.29"
