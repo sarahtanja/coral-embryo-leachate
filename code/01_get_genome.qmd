@@ -2,7 +2,7 @@
 title: "Step 1: Get Genome Data using `curl`and `wget`"
 subtitle: "Use `curl` and `wget` to pull a reference genome from Rutgers University"
 author: "Sarah Tanja"
-date: "`r format(Sys.time(), '%d %B, %Y')`"  
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 format:
   html:
     df-print: paged
@@ -84,5 +84,5 @@ cmp Sample_Info.csv md5.transferred
 So we now have the reference genome V3 files located at `../data/`
 
 ::: callout-info
-**Next Step:** Go to `02s-pseudo-align-kallisto` to align reads to the reference genome
+**Next Step:** Go to `02_get_sequences` to downlaod raw FASTQ files from Azenta
 :::
