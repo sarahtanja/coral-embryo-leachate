@@ -1,0 +1,21 @@
+---
+title: "Step 3: QAQC RNA sequences"
+subtitle: "Use `bbtools` to filter out bad Phred scores"
+author: "Sarah Tanja"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+format:
+  html:
+    df-print: paged
+    toc: true
+    toc-location: left
+    smooth-scroll: true
+    link-external-icon: true
+    link-external-newwindow: true
+    code-fold: false
+    code-tools: true
+    code-copy: true
+    highlight-style: breeze
+    code-overflow: wrap
+    theme: minty
+---
+

@@ -4,3 +4,6 @@
 .Ruserdata
 ./.git/objects/0e/bf8430ebbac7a1ffbc418a81cd244f0a79547d
 ./data/Montipora_capitata_HIv3.assembly.fasta.gz
+./data/Montipora_capitata_HIv3.genes_fixed.gff3
+./data/Montipora_capitata_HIv3.assembly.fasta.gz.1
+./data/Montipora_capitata_HIv3.assembly.fasta
