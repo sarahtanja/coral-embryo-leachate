@@ -2,21 +2,10 @@
 title: "Step 1: Get Genome Data using `curl`and `wget`"
 subtitle: "Use `curl` and `wget` to pull a reference genome from Rutgers University"
 author: "Sarah Tanja"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-format:
-  html:
-    df-print: paged
-    toc: true
-    toc-location: left
-    smooth-scroll: true
-    link-external-icon: true
-    link-external-newwindow: true
-    code-fold: false
-    code-tools: true
-    code-copy: true
-    highlight-style: breeze
-    code-overflow: wrap
-    theme: minty
+date: today
+format: gfm
 ---
+
+# Resource links:
 
 https://sr320.github.io/course-fish546-2023/assignments/02-DGE.html
