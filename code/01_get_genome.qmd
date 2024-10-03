@@ -3,25 +3,12 @@ title: "Step 1: Get Genome Data using `curl`and `wget`"
 subtitle: "Use `curl` and `wget` to pull a reference genome from Rutgers University"
 author: "Sarah Tanja"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-format:
-  html:
-    df-print: paged
-    toc: true
-    toc-location: left
-    smooth-scroll: true
-    link-external-icon: true
-    link-external-newwindow: true
-    code-fold: false
-    code-tools: true
-    code-copy: true
-    highlight-style: breeze
-    code-overflow: wrap
-    theme: minty
+format: gfm
 ---
 
-# Download Annotated Reference Genome for *Montipora capitata*
+# Overview
 
-Deep Dive project with genomes of interest: <https://github.com/urol-e5/deep-dive>
+# Download Annotated Reference Genome for *Montipora capitata*
 
 *Montipora capitata* Genome version V3, Rutgers University: <http://cyanophora.rutgers.edu/montipora/>
 
@@ -77,7 +64,6 @@ md5sum Sample_Info.csv > md5.transferred
 cd ../data
 cmp Sample_Info.csv md5.transferred
 ```
-
 
 # Summary & Next Steps
 
