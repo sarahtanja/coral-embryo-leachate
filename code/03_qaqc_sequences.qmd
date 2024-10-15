@@ -2,20 +2,82 @@
 title: "Step 3: QAQC RNA sequences"
 subtitle: "Use `bbtools` to filter out bad Phred scores"
 author: "Sarah Tanja"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-format:
-  html:
-    df-print: paged
-    toc: true
-    toc-location: left
-    smooth-scroll: true
-    link-external-icon: true
-    link-external-newwindow: true
-    code-fold: false
-    code-tools: true
-    code-copy: true
-    highlight-style: breeze
-    code-overflow: wrap
-    theme: minty
+date: 10/10/2024
+date-format: long
+date-modified: today
+format: gfm
+toc: true
+toc-depth: 3
+link-external-icon: true
+link-external-newwindow: true
 ---
 
+```{r setup, include = FALSE}
+# Set global chunk options
+knitr::opts_chunk$set(eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Goals
+
+# Setup conda environment
+
+Create and activate conda environment (must already have installed miniconda)
+
+::: {.callout-caution appearance="minimal"}
+Execute the following conda commands in the terminal so that you can respond to `Proceed([y]/n)?` with a `y`
+:::
+
+``` bash
+conda create -n mcap2024
+conda activate mcap2024
+```
+
+Install programs within conda environment
+
+-   [fastqc](https://anaconda.org/bioconda/fastqc)
+
+``` bash
+conda install bioconda::fastqc
+```
+
+*FastQC generates sequence quality information of your reads*
+
+-   [multiqc](https://anaconda.org/bioconda/multiqc), [git developer version](Installation)
+
+``` bash
+pip install --upgrade --force-reinstall git+https://github.com/MultiQC/MultiQC.git
+```
+
+*Multiqc summarizes FastQC analysis logs and summarizes results in an html report*
+
+-   [fastp](https://anaconda.org/bioconda/fastp)
+
+``` bash
+conda install bioconda::fastp
+```
+
+*FastP provides fast all-in-one preprocessing for FastQ files*
+
+conda install hisat2 conda install samtools
+
+Run FastQC in the raw directory.
+
+```{bash}
+cd rawfastq/00_fastq
+fastqc ./*.fastq.gz
+```
+
+Make a subdirectory for your FastQC results and move FastQC results there and compile the MultiQC report
+
+```{bash}
+cd ../output
+mkdir 03_qaqc
+mv ../../rawfastq/00_fastq/*fastqc* ./
+multiqc ./
+```
+
+# Quality-trim reads
+
+-   remove adapters
+-   remove low-quality reads
+-   remove reads with high number of unknown bases

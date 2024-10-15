@@ -19,7 +19,7 @@ link-external-newwindow: true
 
 # Sequencing information:
 
-- Azenta Illumina 
+- Azenta Illumina
 
 # Analysis resource links:
 

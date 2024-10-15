@@ -4,7 +4,11 @@ author: "Sarah Tanja"
 date: 10/09/2024
 date-format: long
 date-modified: today
+format: gfm
+toc: true
+toc-depth: 3
 link-external-icon: true
+link-external-newwindow: true
 ---
 
 # Goals
@@ -20,14 +24,16 @@ Environment:
 -   raven : RStudio Server hosted on a Unix OS
 -   gannet: Linux , command line
 
-# Get sequences from Azenta server
+# Get sequences
 
-1.  First access the server that you want to download sequences to. For this you will `.ssh` into the server.
-2.  From within the server, navigate using `cd` commands to the directory that you want the files copied to
-3.  Once inside your target directory, `.ssh` into the Azenta server using `sftp username@azenta.genewiz.com`
+1.  First access the server that you want to download sequences to. Make sure there is plenty of space on the server for these large files.
+2.  From within the desired server, navigate using `cd` commands to the directory that you want the files copied to.
+3.  Here, we used Azenta for sequencing services and are accessing their server which has the raw files we need. Once inside your target directory where you want to transfer these files to, `.ssh` into the Azenta server using `sftp username@azenta.genewiz.com`
 4.  Type in the password to access the azenta server (sent to you in an email from azenta when they notified you that the sequences were generated)
 
-# Check file integrity with `md5sum`
+# Check file integrity
+
+We chek file integrity with `md5sum` .
 
 What is an MD5 checksum? An MD5 checksum is a set of 32 hexadecimal letters and numbers that represent a file's mathematical algorithm. It's used to verify that a file is an accurate copy of the original and hasn't been modified or corrupted.
 
@@ -68,7 +74,7 @@ The following command will:
 
 ```{bash}
 cd ../rawfastq/00_fastq # move to the directory that has both fastq.gz and md5 files
-md5sum -c 6C14_R1_001.fastq.gz.md5 
+md5sum -c 6C14_R1_001.fastq.gz.md5
 ```
 
 ::: callout-caution
@@ -87,5 +93,12 @@ md5sum -c *.md5
 ::: {.callout-tip appearance="minimal" icon="false"}
 Each file should show `OK` !
 :::
+
+Check number of reads per file
+
+```{bash}
+cd ../rawfastq/00_fastq
+zgrep -c "@GWNJ" *.fastq.gz
+```
 
 # Summary
