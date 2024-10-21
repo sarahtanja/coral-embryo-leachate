@@ -63,6 +63,21 @@ This roadmap was built off the following resources and references from:
 
     -   [FISH 546 Compendium](https://rpubs.com/sarah_tanja/1048844)
 
+# Git Large Files
+
+::: {.callout-tip appearance="minimal"}
+
+`find . -type f -size -50M -exec git add {} +`
+:::
+
+-   `find .`: Starts the search from the current directory.
+
+-   `-type f`: Finds only files (not directories).
+
+-   `-size -50M`: Limits the size to files smaller than 50 megabytes.
+
+-   `-exec git add {} +`: Executes the `git add` command on all found files, adding them to the Git staging area.
+
 # Pipeline birds-eye view
 
 ## 1. Receive raw FASTA files

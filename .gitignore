@@ -260,3 +260,6 @@
 ./output/03_qaqc/trim_reads_fastp/131415L14_R1_001.fastp-trim.fq.gz
 ./output/03_qaqc/trim_reads_fastp/101112L9_R1_001.fastp-trim.fq.gz
 ./output/03_qaqc/trim_reads_fastp/789H4_R2_001.fastp-trim.fq.gz
+./data/mcapgenome/Montipora_capitata_HIv3.genes_fixed.gff3
+./data/mcapgenome/Montipora_capitata_HIv3.assembly.fasta.gz
+./data/mcapgenome/Montipora_capitata_HIv3.assembly.fasta
