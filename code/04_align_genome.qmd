@@ -1,0 +1,130 @@
+---
+title: "Step 4: Align sequences to annotated M. capitata genome"
+subtitle: "Using `HISAT-3N`"
+author: "Sarah Tanja"
+date: 10/21/2024
+date-format: long
+date-modified: today
+format: gfm
+toc: true
+toc-depth: 3
+link-external-icon: true
+link-external-newwindow: true
+reference-location: margin
+citation-location: margin
+---
+
+```{r setup, include = FALSE}
+# Set global chunk options
+knitr::opts_chunk$set(eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# 1. INTRODUCTION
+
+This notebook will align trimmed M. capitata RNA-seq data to the M. capitata genome using hierarchical indexing for spliced alignment of transcripts--3 nucleotides [HISAT-3N](https://daehwankimlab.github.io/hisat2/hisat-3n/){style="font-size: 11.4pt;"} [@zhang_rapid_2021]. Followed by StringTie (Pertea et al. 2016, 2015) for transcript assembly/identification and count matrices for downstream expression analysis with DESeq2.
+
+Input(s)
+
+-   Trimmed FastQ files, with format: `*fastp-trim.fq.gz` are located in `output/03_qaqc/trim_reads_fastp`
+
+-   HISAT-3N genome index:
+
+-   Genome GTF:
+
+    -   Genome [Version 3](http://cyanophora.rutgers.edu/montipora/) [@stephens2022]
+    -   [GFF](http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.genes.gff3.gz) from Rutgers (or [GFF fixed](https://github.com/AHuffmyer/EarlyLifeHistory_Energetics/raw/master/Mcap2020/Data/TagSeq/Montipora_capitata_HIv3.genes_fixed.gff3.gz) from AHuffmyer?)
+    -   [genomes, indexes, & feature tracks](https://robertslab.github.io/resources/Genomic-Resources/#montipora-capitata) from Roberts Lab Handbook
+
+-   Sample metadata: `~metadata/rna_metadata.csv`
+
+# 2 \| Create a `bash` variables file
+
+```{r, engine= 'bash'}
+{
+echo "#### Assign Variables ####"
+echo ""
+
+echo "# Data directories"
+echo 'export project_dir=/home/shared/8TB_HDD_01/sarahtanja/coral-embryo-leachate'
+echo 'export output_dir_top=${project_dir}/output'
+echo 'export output_dir_align=${output_dir_top}/04_align'
+echo 'export trimmed_reads_dir=${output_dir_top}/03_qaqc/trim_reads_fastp'
+echo 'export raw_reads_dir=${project_dir}/rawfastq/00_fastq'
+echo 'export genome_dir="${project_dir}/data/mcapgenome"'
+echo 'export genome_index_dir="${project_dir}/output/...RNAseq-genome-index-HiSat2"'
+echo ""
+
+echo "# Location of Hisat2 index files"
+echo "# Must keep variable name formatting, as it's used by HiSat2"
+echo 'export HISAT2_INDEXES="${genome_index_dir}"'
+
+
+echo "# Input files"
+echo 'export exons="${output_dir_top}/Apulchra-genome_hisat2_exons.tab"'
+echo 'export genome_index_name="Apulchra-genome"'
+echo 'export genome_gff="${genome_dir}/Apulchra-genome.gff"'
+echo 'export genome_fasta="${genome_dir}/Apulchra-genome.fa"'
+echo 'export splice_sites="${output_dir_top}/Apulchra-genome_hisat2_splice_sites.tab"'
+echo 'export transcripts_gtf="${genome_dir}/Apulchra-genome.gtf"'
+
+echo "# Output files"
+echo 'export gtf_list="${output_dir_top}/gtf_list.txt"'
+echo 'export merged_bam="${output_dir_top}/sorted-bams-merged.bam"'
+echo ""
+
+echo "# Paths to programs"
+echo 'export programs_dir="/home/shared"'
+echo 'export hisat2_dir="${programs_dir}/hisat2-2.2.1"'
+
+echo 'export hisat2="${hisat2_dir}/hisat2"'
+
+echo 'export multiqc=/home/sam/programs/mambaforge/bin/multiqc'
+
+echo 'export samtools="${programs_dir}/samtools-1.12/samtools"'
+
+echo 'export prepDE="${programs_dir}/stringtie-2.2.1.Linux_x86_64/prepDE.py3"'
+echo 'export stringtie="${programs_dir}/stringtie-2.2.1.Linux_x86_64/stringtie"'
+
+echo ""
+
+echo "# Set FastQ filename patterns"
+echo "export R1_fastq_pattern='*_R1_*.fq.gz'"
+echo "export R2_fastq_pattern='*_R2_*.fq.gz'"
+echo "export trimmed_fastq_pattern='*fastp-trim.fq.gz'"
+echo ""
+
+echo "# Set number of CPUs to use"
+echo 'export threads=40'
+echo ""
+
+echo "# Set average read length - for StringTie prepDE.py"
+echo 'export read_length=150'
+echo ""
+
+
+echo "## Initialize arrays"
+echo 'export fastq_array_R1=()'
+echo 'export fastq_array_R2=()'
+echo 'export R1_names_array=()'
+echo 'export R2_names_array=()'
+echo "declare -A sample_timepoint_map"
+echo ""
+
+echo "# Programs associative array"
+echo "declare -A programs_array"
+echo "programs_array=("
+echo '[hisat2]="${hisat2}" \'
+echo '[multiqc]="${multiqc}" \'
+echo '[prepDE]="${prepDE}" \'
+echo '[samtools]="${samtools}" \'
+echo '[stringtie]="${stringtie}" \'
+echo ")"
+echo ""
+
+echo "# Print formatting"
+echo 'export line="--------------------------------------------------------"'
+echo ""
+} > .bashvars
+
+cat .bashvars
+```

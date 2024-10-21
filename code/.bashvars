@@ -1,0 +1,43 @@
+#### Assign Variables ####
+
+# Data directories
+export project_dir=~/sarahtanja/coral-embryo-leachate
+export output_dir_top=${project_dir}/output
+export output_dir_qaqc=${project_dir}/output/03_qaqc
+export output_dir_trim=${project_dir}/output/03_qaqc/trim_reads_fastp
+export output_dir_clean=${project_dir}/output/03_qaqc/clean_reads_fastqc
+export raw_reads_dir=${project_dir}/rawfastq/00_fastq
+
+# Paths to programs
+export programs_dir="/home/shared"
+export fastp="${programs_dir}/fastp"
+export fastqc=${programs_dir}/FastQC-0.12.1/fastqc
+export multiqc=/home/sam/programs/mambaforge/bin/multiqc
+
+# Set FastQ filename patterns
+export fastq_pattern='*.fastq.gz'
+export R1_fastq_pattern='*_R1_*.fastq.gz'
+export R2_fastq_pattern='*_R2_*.fastq.gz'
+export trimmed_fastq_pattern='*fastp-trim.fq.gz'
+
+# Set number of CPUs to use
+export threads=40
+
+## Inititalize arrays
+export fastq_array_R1=()
+export fastq_array_R2=()
+export raw_fastqs_array=()
+export R1_names_array=()
+export R2_names_array=()
+
+# Programs associative array
+declare -A programs_array
+programs_array=(
+[fastp]="${fastp}" \
+[fastqc]="${fastqc}" \
+[multiqc]="${multiqc}" \
+)
+
+# Print formatting
+export line="--------------------------------------------------------"
+

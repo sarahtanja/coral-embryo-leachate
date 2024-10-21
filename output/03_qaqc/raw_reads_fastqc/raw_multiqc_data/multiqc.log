@@ -1,0 +1,2 @@
+[2024-10-15 09:44:50,322] multiqc.core.file_search                           [INFO   ]  Search path: /home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/03_qaqc
+[2024-10-15 09:44:57,027] multiqc.modules.fastqc.fastqc                      [INFO   ]  Found 126 reports

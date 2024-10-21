@@ -43,7 +43,7 @@ How to do a [for loop in bash](https://stackoverflow.com/questions/9612090/how-t
 Instead of \``git add –all` execute `find . -type f -size -104M -exec git add {} +` in terminal before making a git commit to only track files that are under the git size limit of 10MB.
 :::
 
-# 2 \|  `FastQC` RAW READS
+# 2 \| `FastQC` RAW READS
 
 FastQC on Raven lives: `/home/shared/FastQC/fastqc`
 
@@ -338,7 +338,7 @@ echo ""
 echo "Beginning MultiQC on trimmed FastQC..."
 echo ""
 
-${programs_array[multiqc]} ${output_dir_trim} -o ${output_dir_clean}
+${programs_array[multiqc]} ${output_dir_clean} -o ${output_dir_clean}
 
 echo ""
 echo "MultiQC on trimmed FastQs complete."
