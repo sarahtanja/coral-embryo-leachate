@@ -290,7 +290,7 @@ do
   --out1 "${output_dir_trim}"/"${R1_sample_name}"_R1_001.fastp-trim.fq.gz \
   --out2 "${output_dir_trim}"/"${R2_sample_name}"_R2_001.fastp-trim.fq.gz \
   2>> "${output_dir_trim}"/fastp.stderr
-  
+
 
   # Generate md5 checksums for newly trimmed files
   cd "${output_dir_trim}"
