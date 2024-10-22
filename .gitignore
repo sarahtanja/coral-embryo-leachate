@@ -263,3 +263,10 @@
 ./data/mcapgenome/Montipora_capitata_HIv3.genes_fixed.gff3
 ./data/mcapgenome/Montipora_capitata_HIv3.assembly.fasta.gz
 ./data/mcapgenome/Montipora_capitata_HIv3.assembly.fasta
+./data/mcapgenome/Montipora_capitata_HIv3.genes.gtf
+./data/mcapgenome/Montipora_capitata_HIv3.6.ht2
+./data/mcapgenome/Montipora_capitata_HIv3.4.ht2
+./data/mcapgenome/Montipora_capitata_HIv3.2.ht2
+./data/mcapgenome/Montipora_capitata_HIv3.1.ht2
+./data/mcapgenome/Montipora_capitata_HIv3.5.ht2
+./data/mcapgenome/Montipora_capitata_HIv3-hisat2-indices.tar.gz

@@ -133,7 +133,7 @@ wget https://gannet.fish.washington.edu/Atumefaciens/20230127-mcap-gff_to_gtf/Mo
 ```{r, engine = 'bash'}
 cd ../data/mcapgenome
 
-md5sum *.gff3.gz *.gtf 
+md5sum *.gff3.gz *.gtf
 ```
 
 # 3 \| Create a `bash` variables file
@@ -149,7 +149,7 @@ echo 'export genome_dir="${project_dir}/data/mcapgenome"'
 #echo 'export genome_index_dir="${genome_dir}"'
 echo 'export output_dir_top=${project_dir}/output'
 echo 'export output_dir_align=${output_dir_top}/04_align'
-echo 'export trimmed_reads_dir=${output_dir_top}/03_qaqc/trim_reads_fastp'
+echo 'export trimmed_fastqs_dir=${output_dir_top}/03_qaqc/trim_reads_fastp'
 echo 'export raw_reads_dir=${project_dir}/rawfastq/00_fastq'
 echo ""
 
@@ -200,7 +200,7 @@ echo 'export fastq_array_R1=()'
 echo 'export fastq_array_R2=()'
 echo 'export R1_names_array=()'
 echo 'export R2_names_array=()'
-echo "declare -A sample_timepoint_map"
+echo "declare -A sample_info_map"
 echo ""
 
 echo "# Programs associative array"
@@ -223,3 +223,145 @@ cat .bashvars
 ```
 
 # 4 \| Align reads using HISAT 2
+
+This requires usage of the `mcap_RNAseq_simplified_metadata.csv`
+
+This step has a lengthy, semi-complex workflow:
+
+1.  Parse `mcap_RNAseq_simplified_metadata.csv` for *M. capitata* sample names, leachate treatments, and embryonic phase. This info will be used for downstream file naming and for passing the treatment variables to the read group (`SM:`) in the alignment file.
+
+2.  Loop through all samples and perform individual alignments using HISAT2.
+
+3.  HISAT2 output is piped to through multiple samtools tools: flagstat (stats aggregation), sort (creates/sorts BAM), index (creates BAM index). Piping saves time and disk space, by avoiding the generation of large SAM files.
+
+4.  Loop continues and runs StringTie on sorted BAM file to produce individual GTF file.
+
+5.  Loop continues and adds GTF path/filename to a list file, which will be used downstream.
+
+```{r}
+if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse')
+```
+
+```{r}
+metadata <- read.csv("../metadata/mcap_RNAseq_simplified_metadata.csv")
+head(metadata)
+```
+
+```{r, engine = 'bash'}
+# Load bash variables into memory
+source .bashvars
+
+# Make output directories, if they don't exist
+mkdir --parents "${output_dir_align}"
+
+# Change to ouput directory
+cd "${output_dir_align}"
+
+# Create associative array with sample and timepoint
+metadata="../../metadata/mcap_RNAseq_simplified_metadata.csv"
+
+# Declare the associative array to store all the sample information
+declare -A sample_info_map
+
+# Read the metadata file line by line
+while IFS=',' read -r sample_no sample_name organism collection_date development_stage pvc_leachate_level hours_post_fertilization pvc_leachate_concentration_mg_L plate well sample_type sample_buffer; do
+    # Add the sample name as the key and the combined info as the value
+    sample_info_map["${sample_name}"]="${collection_date},${development_stage},${pvc_leachate_level},${hours_post_fertilization},${pvc_leachate_concentration_mg_L}"
+done < <(tail -n +2 "${metadata}") # Skip the header
+
+
+## Populate trimmed reads arrays
+fastq_array_R1=("${trimmed_fastqs_dir}"/${R1_fastq_pattern})
+fastq_array_R2=("${trimmed_fastqs_dir}"/${R2_fastq_pattern})
+
+############## BEGIN HISAT2 ALIGNMENTS ##############
+for sample in "${!sample_info_map[@]}"
+do
+
+
+  # Create and switch to dedicated sample directory
+  mkdir --parents "${sample}" && cd "$_"
+
+  # Create HISAT2 list of fastq R1 files
+  # and generated MD5 checksums file.
+  for fastq in "${fastq_array_R1[@]}"
+  do
+    # Parse sample name from FastQ filename
+    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_-]" '{print $3}')
+    
+    # Process matching FastQ file, based on sample name
+    if [ "${fastq_sample}" == "${sample}" ]; then
+      
+      # Generate checksum/list of input files used
+      md5sum "${fastq}" >> input_fastqs_checksums.md5
+      
+      # Create comma-separated lists of FastQs for HISAT2
+      printf -v joined_R1 '%s,' "${fastq}"
+      fastq_list_R1=$(echo "${joined_R1%,}")
+    fi
+  done
+
+  # Create HISAT2 list of fastq R1 files
+  # and generated MD5 checksums file.
+  for fastq in "${fastq_array_R2[@]}"
+  do
+    # Parse sample name from FastQ filename
+    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_-]" '{print $3}')
+    
+    # Process matching FastQ file, based on sample name
+    if [ "${fastq_sample}" == "${sample}" ]; then
+      
+      # Generate checksum/list of input files used
+      md5sum "${fastq}" >> input_fastqs_checksums.md5
+
+      # Create comma-separated lists of FastQs for HISAT2
+      printf -v joined_R2 '%s,' "${fastq}"
+      fastq_list_R2=$(echo "${joined_R2%,}")
+    fi
+  done
+
+
+
+  # HISAT2 alignments
+  # Sets read group info (RG) using samples array
+  "${programs_array[hisat2]}" \
+  -x "${genome_index_name}" \
+  -1 "${fastq_list_R1}" \
+  -2 "${fastq_list_R2}" \
+  --threads "${threads}" \
+  --rg-id "${sample}" \
+  --rg "SM:""${sample_timepoint_map[$sample]}" \
+  2> "${sample}"_hisat2.stats \
+  | tee >(${programs_array[samtools]} flagstat - > "${sample}"-hisat2_output.flagstat) \
+  | ${programs_array[samtools]} sort - -@ "${threads}" -O BAM \
+  | tee "${sample}".sorted.bam \
+  | ${programs_array[samtools]} index - "${sample}".sorted.bam.bai
+  
+  
+  # Run stringtie on alignments
+  # Uses "-B" option to output tables intended for use in Ballgown
+  # Uses "-e" option; recommended when using "-B" option.
+  # Limits analysis to only reads alignments matching reference.
+  "${programs_array[stringtie]}" "${sample}".sorted.bam \
+  -p "${threads}" \
+  -o "${sample}".gtf \
+  -G "${genome_gff}" \
+  -C "${sample}.cov_refs.gtf" \
+  -B \
+  -e 
+  
+  
+  # Add GTFs to list file, only if non-empty
+  # Identifies GTF files that only have header
+  gtf_lines=$(wc -l < "${sample}".gtf )
+  if [ "${gtf_lines}" -gt 2 ]; then
+    echo "$(pwd)/${sample}.gtf" >> "${gtf_list}"
+  fi 
+
+  # Generate checksums
+  find ./ -type f -not -name "*.md5" -exec md5sum {} \; > ${sample}_checksums.md5
+  # Move up to orig. working directory
+  cd ..
+
+done
+```
