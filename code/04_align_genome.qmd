@@ -19,7 +19,7 @@ citation-location: margin
 knitr::opts_chunk$set(eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-# 1. INTRODUCTION
+# 1 \| INTRODUCTION
 
 This notebook will align trimmed M. capitata RNA-seq data to the M. capitata genome using hierarchical indexing for spliced alignment of transcripts--3 nucleotides [HISAT-3N](https://daehwankimlab.github.io/hisat2/hisat-3n/){style="font-size: 11.4pt;"} [@zhang_rapid_2021]. Followed by StringTie (Pertea et al. 2016, 2015) for transcript assembly/identification and count matrices for downstream expression analysis with DESeq2.
 
@@ -27,7 +27,7 @@ Input(s)
 
 -   Trimmed FastQ files, with format: `*fastp-trim.fq.gz` are located in `output/03_qaqc/trim_reads_fastp`
 
--   HISAT-3N genome index:
+-   HISAT 2 genome index:
 
 -   Genome GTF:
 
@@ -37,7 +37,106 @@ Input(s)
 
 -   Sample metadata: `~metadata/rna_metadata.csv`
 
-# 2 \| Create a `bash` variables file
+# 2 \| Genome downloads
+
+## Annotated Reference Genome for *Montipora capitata*
+
+Deep Dive project with genomes of interest: https://github.com/urol-e5/deep-dive
+
+*Montipora capitata* Genome version V3, Rutgers University: <http://cyanophora.rutgers.edu/montipora/>
+
+Genome publication: <https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giac098/6815755>
+
+Nucleotide Coding Sequence (CDS): <http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.genes.cds.fna.gz>
+
+This code grabs the *Montipora capitata* fasta file (rna.fna) of genes.
+
+```{r, engine = 'bash'}
+# change from code directory to work in data directory
+cd ../data
+
+# make mcapgenome directory a subdirectory of data if not already present
+mkdir -p mcapgenome
+
+# change directory to ~data/mcapgenome
+cd mcapgenome
+
+# download the annotated genomes from the rutgers site if not already present
+[-f Montipora_capitata_HIv3.genes.cds.fna.gz] || wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.genes.cds.fna.gz
+
+[-f Montipora_capitata_HIv3.assembly.fasta.gz] || wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.assembly.fasta.gz
+```
+
+## HISAT Index
+
+-   [`Montipora_capitata_HIv3-hisat2-indices.tar.gz`](https://gannet.fish.washington.edu/Atumefaciens/20230131-mcap-HIv3-hisat2-build-index/Montipora_capitata_HIv3-hisat2-indices.tar.gz) (tarball gzip; 1.2GB)
+
+    -   MD5 checksum: `c8accb6c54e843198c776f0d6f0c603d`
+
+    -   Needs to be unpacked before use!
+
+```{r, engine = 'bash'}
+# change to work in data genome directory
+cd ../data/mcapgenome
+
+# download the hisat index from Robert's Lab gannet server
+[-f Montipora_capitata_HIv3-hisat2-indices.tar.gz] || wget https://gannet.fish.washington.edu/Atumefaciens/20230131-mcap-HIv3-hisat2-build-index/Montipora_capitata_HIv3-hisat2-indices.tar.gz
+```
+
+```{r, engine = 'bash'}
+cd ../data/mcapgenome
+md5sum *hisat2*
+```
+
+Unpack the tar.gz hisat index file using `tar -xvzf`
+
+-   `-x`: Extracts the contents of the archive.
+
+-   `-v`: Verbose, shows the files being extracted.
+
+-   `-z`: Tells `tar` that the archive is compressed with `gzip` (for `.tar.gz` files).
+
+-   `-f`: Specifies the file name of the archive to extract.
+
+This command will extract the contents of the `.tar.gz` file into the current directory:
+
+```{r, engine = 'bash'}
+cd ../data/mcapgenome
+tar -xvzf Montipora_capitata_HIv3-hisat2-indices.tar.gz
+```
+
+## Genome Feature Tracks
+
+[Generic Feature Format (GFF3)](https://gmod.org/wiki/GFF3)
+
+-   [`Montipora_capitata_HIv3.genes.gff3`](https://owl.fish.washington.edu/halfshell/genomic-databank/Montipora_capitata_HIv3.genes.gff3) (67MB)
+
+    -   MD5 checksum: `5f6b80ba2885471c8c1534932ccb7e84`
+
+    -   Downloaded 2023017: <http://cyanophora.rutgers.edu/montipora/>
+
+-   [`Montipora_capitata_HIv3.genes.gtf`](https://gannet.fish.washington.edu/Atumefaciens/20230127-mcap-gff_to_gtf/Montipora_capitata_HIv3.genes.gtf) (101MB)
+
+    -   MD5 checksum: `ceef8eca945199415b23d2f1f0dd2066`
+
+    -   Created 2023017: <https://github.com/urol-e5/timeseries_molecular/blob/cf654b9967c7a5d81e3aeca370b0c8f324badcbd/D-Apul/code/02.00-D-Apul-RNAseq-gff-to-gtf.Rmd>
+
+```{r, engine = 'bash'}
+# change to work in data genome directory
+cd ../data/mcapgenome
+
+wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.genes.gff3.gz
+
+wget https://gannet.fish.washington.edu/Atumefaciens/20230127-mcap-gff_to_gtf/Montipora_capitata_HIv3.genes.gtf
+```
+
+```{r, engine = 'bash'}
+cd ../data/mcapgenome
+
+md5sum *.gff3.gz *.gtf 
+```
+
+# 3 \| Create a `bash` variables file
 
 ```{r, engine= 'bash'}
 {
@@ -46,45 +145,40 @@ echo ""
 
 echo "# Data directories"
 echo 'export project_dir=/home/shared/8TB_HDD_01/sarahtanja/coral-embryo-leachate'
+echo 'export genome_dir="${project_dir}/data/mcapgenome"'
+#echo 'export genome_index_dir="${genome_dir}"'
 echo 'export output_dir_top=${project_dir}/output'
 echo 'export output_dir_align=${output_dir_top}/04_align'
 echo 'export trimmed_reads_dir=${output_dir_top}/03_qaqc/trim_reads_fastp'
 echo 'export raw_reads_dir=${project_dir}/rawfastq/00_fastq'
-echo 'export genome_dir="${project_dir}/data/mcapgenome"'
-echo 'export genome_index_dir="${project_dir}/output/...RNAseq-genome-index-HiSat2"'
 echo ""
 
 echo "# Location of Hisat2 index files"
 echo "# Must keep variable name formatting, as it's used by HiSat2"
-echo 'export HISAT2_INDEXES="${genome_index_dir}"'
+echo 'export HISAT2_INDEXES="${genome_dir}"'
 
 
 echo "# Input files"
-echo 'export exons="${output_dir_top}/Apulchra-genome_hisat2_exons.tab"'
-echo 'export genome_index_name="Apulchra-genome"'
-echo 'export genome_gff="${genome_dir}/Apulchra-genome.gff"'
-echo 'export genome_fasta="${genome_dir}/Apulchra-genome.fa"'
-echo 'export splice_sites="${output_dir_top}/Apulchra-genome_hisat2_splice_sites.tab"'
-echo 'export transcripts_gtf="${genome_dir}/Apulchra-genome.gtf"'
+#echo 'export exons="${output_dir_top}/Apulchra-genome_hisat2_exons.tab"'
+echo 'export genome_index_name="Montipora_capitata_HIv3"'
+echo 'export genome_gff="${genome_dir}/Montipora_capitata_HIv3.genes.gff3"'
+echo 'export genome_fasta="${genome_dir}/Montipora_capitata_HIv3.assembly.fasta"'
+#echo 'export splice_sites="${output_dir_top}/Apulchra-genome_hisat2_splice_sites.tab"'
+echo 'export transcripts_gtf="${genome_dir}/Montipora_capitata_HIv3.genes.gtf"'
 
 echo "# Output files"
-echo 'export gtf_list="${output_dir_top}/gtf_list.txt"'
-echo 'export merged_bam="${output_dir_top}/sorted-bams-merged.bam"'
+echo 'export gtf_list="${output_dir_align}/gtf_list.txt"'
+echo 'export merged_bam="${output_dir_align}/sorted-bams-merged.bam"'
 echo ""
 
 echo "# Paths to programs"
 echo 'export programs_dir="/home/shared"'
 echo 'export hisat2_dir="${programs_dir}/hisat2-2.2.1"'
-
 echo 'export hisat2="${hisat2_dir}/hisat2"'
-
 echo 'export multiqc=/home/sam/programs/mambaforge/bin/multiqc'
-
 echo 'export samtools="${programs_dir}/samtools-1.12/samtools"'
-
 echo 'export prepDE="${programs_dir}/stringtie-2.2.1.Linux_x86_64/prepDE.py3"'
 echo 'export stringtie="${programs_dir}/stringtie-2.2.1.Linux_x86_64/stringtie"'
-
 echo ""
 
 echo "# Set FastQ filename patterns"
@@ -100,7 +194,6 @@ echo ""
 echo "# Set average read length - for StringTie prepDE.py"
 echo 'export read_length=150'
 echo ""
-
 
 echo "## Initialize arrays"
 echo 'export fastq_array_R1=()'
@@ -128,3 +221,5 @@ echo ""
 
 cat .bashvars
 ```
+
+# 4 \| Align reads using HISAT 2

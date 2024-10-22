@@ -1,41 +1,60 @@
 #### Assign Variables ####
 
 # Data directories
-export project_dir=~/sarahtanja/coral-embryo-leachate
+export project_dir=/home/shared/8TB_HDD_01/sarahtanja/coral-embryo-leachate
+export genome_dir="${project_dir}/data/mcapgenome"
 export output_dir_top=${project_dir}/output
-export output_dir_qaqc=${project_dir}/output/03_qaqc
-export output_dir_trim=${project_dir}/output/03_qaqc/trim_reads_fastp
-export output_dir_clean=${project_dir}/output/03_qaqc/clean_reads_fastqc
+export output_dir_align=${output_dir_top}/04_align
+export trimmed_reads_dir=${output_dir_top}/03_qaqc/trim_reads_fastp
 export raw_reads_dir=${project_dir}/rawfastq/00_fastq
+
+# Location of Hisat2 index files
+# Must keep variable name formatting, as it's used by HiSat2
+export HISAT2_INDEXES="${genome_dir}"
+# Input files
+export genome_index_name="Montipora_capitata_HIv3"
+export genome_gff="${genome_dir}/Montipora_capitata_HIv3.genes.gff3"
+export genome_fasta="${genome_dir}/Montipora_capitata_HIv3.assembly.fasta"
+export transcripts_gtf="${genome_dir}/Montipora_capitata_HIv3.genes.gtf"
+# Output files
+export gtf_list="${output_dir_align}/gtf_list.txt"
+export merged_bam="${output_dir_align}/sorted-bams-merged.bam"
 
 # Paths to programs
 export programs_dir="/home/shared"
-export fastp="${programs_dir}/fastp"
-export fastqc=${programs_dir}/FastQC-0.12.1/fastqc
+export hisat2_dir="${programs_dir}/hisat2-2.2.1"
+export hisat2="${hisat2_dir}/hisat2"
 export multiqc=/home/sam/programs/mambaforge/bin/multiqc
+export samtools="${programs_dir}/samtools-1.12/samtools"
+export prepDE="${programs_dir}/stringtie-2.2.1.Linux_x86_64/prepDE.py3"
+export stringtie="${programs_dir}/stringtie-2.2.1.Linux_x86_64/stringtie"
 
 # Set FastQ filename patterns
-export fastq_pattern='*.fastq.gz'
-export R1_fastq_pattern='*_R1_*.fastq.gz'
-export R2_fastq_pattern='*_R2_*.fastq.gz'
+export R1_fastq_pattern='*_R1_*.fq.gz'
+export R2_fastq_pattern='*_R2_*.fq.gz'
 export trimmed_fastq_pattern='*fastp-trim.fq.gz'
 
 # Set number of CPUs to use
 export threads=40
 
-## Inititalize arrays
+# Set average read length - for StringTie prepDE.py
+export read_length=150
+
+## Initialize arrays
 export fastq_array_R1=()
 export fastq_array_R2=()
-export raw_fastqs_array=()
 export R1_names_array=()
 export R2_names_array=()
+declare -A sample_timepoint_map
 
 # Programs associative array
 declare -A programs_array
 programs_array=(
-[fastp]="${fastp}" \
-[fastqc]="${fastqc}" \
+[hisat2]="${hisat2}" \
 [multiqc]="${multiqc}" \
+[prepDE]="${prepDE}" \
+[samtools]="${samtools}" \
+[stringtie]="${stringtie}" \
 )
 
 # Print formatting
