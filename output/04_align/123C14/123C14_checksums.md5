@@ -1,0 +1,10 @@
+3693bf29662a1dc1b5e86f4de98c5d83  ./123C14.gtf
+d41d8cd98f00b204e9800998ecf8427e  ./123C14-hisat2_output.flagstat
+d41d8cd98f00b204e9800998ecf8427e  ./123C14.cov_refs.gtf
+545698330a6c55db74933b2c5f7bca63  ./i_data.ctab
+6d1203b48bf9a726d271275f1afa09cb  ./i2t.ctab
+aa75ba89f4ebd877e83a7f592aa48cea  ./123C14_hisat2.stats
+a2e320732379fa7fed6b82a920b94fca  ./e_data.ctab
+d41d8cd98f00b204e9800998ecf8427e  ./123C14.sorted.bam
+2c132089ce24f387180f00ee27fe4205  ./t_data.ctab
+c935344db0ed72312286985d4fb31b80  ./e2t.ctab

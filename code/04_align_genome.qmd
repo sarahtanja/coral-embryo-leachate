@@ -1,23 +1,23 @@
 ---
-title: "Step 4: Align sequences to annotated M. capitata genome"
-subtitle: "Using `HISAT-3N`"
+title: "Step 4: Align sequences to annotated *M. capitata* genome"
+subtitle: "Using `HISAT2`"
 author: "Sarah Tanja"
 date: 10/21/2024
-date-format: long
-date-modified: today
-format: gfm
+format: 
+  gfm: default  # or html if you want to render in HTML
 toc: true
 toc-depth: 3
 link-external-icon: true
 link-external-newwindow: true
 reference-location: margin
 citation-location: margin
+execute:
+  cache: true
+  eval: true
+  echo: true
+  warning: false
+  message: false
 ---
-
-```{r setup, include = FALSE}
-# Set global chunk options
-knitr::opts_chunk$set(eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
-```
 
 # 1 \| INTRODUCTION
 
@@ -51,7 +51,7 @@ Nucleotide Coding Sequence (CDS): <http://cyanophora.rutgers.edu/montipora/Monti
 
 This code grabs the *Montipora capitata* fasta file (rna.fna) of genes.
 
-```{r, engine = 'bash'}
+```{r, genome-download, engine = 'bash'}
 # change from code directory to work in data directory
 cd ../data
 
@@ -62,9 +62,22 @@ mkdir -p mcapgenome
 cd mcapgenome
 
 # download the annotated genomes from the rutgers site if not already present
-[-f Montipora_capitata_HIv3.genes.cds.fna.gz] || wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.genes.cds.fna.gz
-
 [-f Montipora_capitata_HIv3.assembly.fasta.gz] || wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.assembly.fasta.gz
+```
+
+-   [`Montipora_capitata_HIv3.assembly.fasta`](https://owl.fish.washington.edu/halfshell/genomic-databank/Montipora_capitata_HIv3.assembly.fasta) (745MB)
+
+    -   MD5 checksum: `99819eadba1b13ed569bb902eef8da08`
+
+    -   Downloaded 2023017: <http://cyanophora.rutgers.edu/montipora/>
+
+```{r, genome-checksums, engine = 'bash'}
+# change to work in data genome folder
+cd ../data/mcapgenome
+
+# generate checksum for the genome assembly file 
+md5sum *assembly*
+
 ```
 
 ## HISAT Index
@@ -75,7 +88,7 @@ cd mcapgenome
 
     -   Needs to be unpacked before use!
 
-```{r, engine = 'bash'}
+```{r, hisat-download, engine = 'bash'}
 # change to work in data genome directory
 cd ../data/mcapgenome
 
@@ -83,8 +96,11 @@ cd ../data/mcapgenome
 [-f Montipora_capitata_HIv3-hisat2-indices.tar.gz] || wget https://gannet.fish.washington.edu/Atumefaciens/20230131-mcap-HIv3-hisat2-build-index/Montipora_capitata_HIv3-hisat2-indices.tar.gz
 ```
 
-```{r, engine = 'bash'}
+```{r, hisat-checksum, engine = 'bash'}
+# change to work in data genome directory
 cd ../data/mcapgenome
+
+# generate checksum for the hisat index zip file 
 md5sum *hisat2*
 ```
 
@@ -100,7 +116,7 @@ Unpack the tar.gz hisat index file using `tar -xvzf`
 
 This command will extract the contents of the `.tar.gz` file into the current directory:
 
-```{r, engine = 'bash'}
+```{r, hisat-unzip, engine = 'bash'}
 cd ../data/mcapgenome
 tar -xvzf Montipora_capitata_HIv3-hisat2-indices.tar.gz
 ```
@@ -121,7 +137,7 @@ tar -xvzf Montipora_capitata_HIv3-hisat2-indices.tar.gz
 
     -   Created 2023017: <https://github.com/urol-e5/timeseries_molecular/blob/cf654b9967c7a5d81e3aeca370b0c8f324badcbd/D-Apul/code/02.00-D-Apul-RNAseq-gff-to-gtf.Rmd>
 
-```{r, engine = 'bash'}
+```{r, feature-tracks-download, engine = 'bash'}
 # change to work in data genome directory
 cd ../data/mcapgenome
 
@@ -130,13 +146,44 @@ wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.genes.gff3.
 wget https://gannet.fish.washington.edu/Atumefaciens/20230127-mcap-gff_to_gtf/Montipora_capitata_HIv3.genes.gtf
 ```
 
-```{r, engine = 'bash'}
+```{r, feature-tracks-checksum, engine = 'bash'}
 cd ../data/mcapgenome
 
-md5sum *.gff3.gz *.gtf
+md5sum *.gff3.gz *.gtf *gff3
+```
+
+```{r, engine = 'bash'}
+
+cd ../data/mcapgenome
+
+head -10 Montipora_capitata_HIv3.genes.gff3
+
+```
+
+Load libraries and data.
+
+```{r}
+
+if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse')
+if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse')
+
+library(tidyverse)
+library(R.utils)
+
+```
+
+```{r}
+
+gff <- read.csv(file="../data/mcapgenome/Montipora_capitata_HIv3.genes.gff3", header=FALSE, sep="\t") 
+
+gff_fixed <- read.csv(file="../data/mcapgenome/Montipora_capitata_HIv3.genes_fixed.gff3", header=FALSE, sep="\t") 
+
+gtf <- 
 ```
 
 # 3 \| Create a `bash` variables file
+
+This file will overwrite any existing `.bashvars` file that is in the code directory
 
 ```{r, engine= 'bash'}
 {
@@ -144,9 +191,9 @@ echo "#### Assign Variables ####"
 echo ""
 
 echo "# Data directories"
-echo 'export project_dir=/home/shared/8TB_HDD_01/sarahtanja/coral-embryo-leachate'
+echo 'export project_dir=/home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate'
 echo 'export genome_dir="${project_dir}/data/mcapgenome"'
-#echo 'export genome_index_dir="${genome_dir}"'
+echo 'export genome_index_dir="${genome_dir}/hisat-index"'
 echo 'export output_dir_top=${project_dir}/output'
 echo 'export output_dir_align=${output_dir_top}/04_align'
 echo 'export trimmed_fastqs_dir=${output_dir_top}/03_qaqc/trim_reads_fastp'
@@ -155,13 +202,13 @@ echo ""
 
 echo "# Location of Hisat2 index files"
 echo "# Must keep variable name formatting, as it's used by HiSat2"
-echo 'export HISAT2_INDEXES="${genome_dir}"'
+echo 'export HISAT2_INDEXES="${genome_index_dir}"'
 
 
 echo "# Input files"
 #echo 'export exons="${output_dir_top}/Apulchra-genome_hisat2_exons.tab"'
-echo 'export genome_index_name="Montipora_capitata_HIv3"'
-echo 'export genome_gff="${genome_dir}/Montipora_capitata_HIv3.genes.gff3"'
+echo 'export genome_index_name="Montipora_capitata_HIv3."'
+echo 'export genome_gff="${genome_dir}/Montipora_capitata_HIv3.genes_fixed.gff3"'
 echo 'export genome_fasta="${genome_dir}/Montipora_capitata_HIv3.assembly.fasta"'
 #echo 'export splice_sites="${output_dir_top}/Apulchra-genome_hisat2_splice_sites.tab"'
 echo 'export transcripts_gtf="${genome_dir}/Montipora_capitata_HIv3.genes.gtf"'
@@ -239,10 +286,6 @@ This step has a lengthy, semi-complex workflow:
 5.  Loop continues and adds GTF path/filename to a list file, which will be used downstream.
 
 ```{r}
-if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse')
-```
-
-```{r}
 metadata <- read.csv("../metadata/mcap_RNAseq_simplified_metadata.csv")
 head(metadata)
 ```
@@ -288,13 +331,13 @@ do
   do
     # Parse sample name from FastQ filename
     fastq_sample=$(echo "${fastq##*/}" | awk -F"[_-]" '{print $3}')
-    
+
     # Process matching FastQ file, based on sample name
     if [ "${fastq_sample}" == "${sample}" ]; then
-      
+
       # Generate checksum/list of input files used
       md5sum "${fastq}" >> input_fastqs_checksums.md5
-      
+
       # Create comma-separated lists of FastQs for HISAT2
       printf -v joined_R1 '%s,' "${fastq}"
       fastq_list_R1=$(echo "${joined_R1%,}")
@@ -307,10 +350,10 @@ do
   do
     # Parse sample name from FastQ filename
     fastq_sample=$(echo "${fastq##*/}" | awk -F"[_-]" '{print $3}')
-    
+
     # Process matching FastQ file, based on sample name
     if [ "${fastq_sample}" == "${sample}" ]; then
-      
+
       # Generate checksum/list of input files used
       md5sum "${fastq}" >> input_fastqs_checksums.md5
 
@@ -330,14 +373,14 @@ do
   -2 "${fastq_list_R2}" \
   --threads "${threads}" \
   --rg-id "${sample}" \
-  --rg "SM:""${sample_timepoint_map[$sample]}" \
+  --rg "SM:""${sample_info_map[$sample]}" \
   2> "${sample}"_hisat2.stats \
   | tee >(${programs_array[samtools]} flagstat - > "${sample}"-hisat2_output.flagstat) \
   | ${programs_array[samtools]} sort - -@ "${threads}" -O BAM \
   | tee "${sample}".sorted.bam \
   | ${programs_array[samtools]} index - "${sample}".sorted.bam.bai
-  
-  
+
+
   # Run stringtie on alignments
   # Uses "-B" option to output tables intended for use in Ballgown
   # Uses "-e" option; recommended when using "-B" option.
@@ -348,15 +391,15 @@ do
   -G "${genome_gff}" \
   -C "${sample}.cov_refs.gtf" \
   -B \
-  -e 
-  
-  
+  -e
+
+
   # Add GTFs to list file, only if non-empty
   # Identifies GTF files that only have header
   gtf_lines=$(wc -l < "${sample}".gtf )
   if [ "${gtf_lines}" -gt 2 ]; then
     echo "$(pwd)/${sample}.gtf" >> "${gtf_list}"
-  fi 
+  fi
 
   # Generate checksums
   find ./ -type f -not -name "*.md5" -exec md5sum {} \; > ${sample}_checksums.md5
@@ -364,4 +407,11 @@ do
   cd ..
 
 done
+```
+
+```{r, engine = 'bash'}
+cd ../data/mcapgenome
+
+head Montipora_capitata_HIv3.assembly.fasta
+
 ```
