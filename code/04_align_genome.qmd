@@ -207,7 +207,7 @@ echo 'export HISAT2_INDEXES="${genome_index_dir}"'
 
 echo "# Input files"
 #echo 'export exons="${output_dir_top}/Apulchra-genome_hisat2_exons.tab"'
-echo 'export genome_index_name="Montipora_capitata_HIv3."'
+echo 'export genome_index_name="Montipora_capitata_HIv3"'
 echo 'export genome_gff="${genome_dir}/Montipora_capitata_HIv3.genes_fixed.gff3"'
 echo 'export genome_fasta="${genome_dir}/Montipora_capitata_HIv3.assembly.fasta"'
 #echo 'export splice_sites="${output_dir_top}/Apulchra-genome_hisat2_splice_sites.tab"'
@@ -271,6 +271,8 @@ cat .bashvars
 
 # 4 \| Align reads using HISAT 2
 
+## Sam's Loop
+
 This requires usage of the `mcap_RNAseq_simplified_metadata.csv`
 
 This step has a lengthy, semi-complex workflow:
@@ -307,9 +309,9 @@ metadata="../../metadata/mcap_RNAseq_simplified_metadata.csv"
 declare -A sample_info_map
 
 # Read the metadata file line by line
-while IFS=',' read -r sample_no sample_name organism collection_date development_stage pvc_leachate_level hours_post_fertilization pvc_leachate_concentration_mg_L plate well sample_type sample_buffer; do
+while IFS=',' read -r sample_no sample_name organism collection_date pvc_leachate_level hours_post_fertilization plate well sample_type sample_buffer; do
     # Add the sample name as the key and the combined info as the value
-    sample_info_map["${sample_name}"]="${collection_date},${development_stage},${pvc_leachate_level},${hours_post_fertilization},${pvc_leachate_concentration_mg_L}"
+    sample_info_map["${sample_name}"]="${collection_date},${pvc_leachate_level},${hours_post_fertilization}"
 done < <(tail -n +2 "${metadata}") # Skip the header
 
 
@@ -385,6 +387,151 @@ do
   -B \
   -e
 
+
+  # Add GTFs to list file, only if non-empty
+  # Identifies GTF files that only have header
+  gtf_lines=$(wc -l < "${sample}".gtf )
+  if [ "${gtf_lines}" -gt 2 ]; then
+    echo "$(pwd)/${sample}.gtf" >> "${gtf_list}"
+  fi
+
+  # Generate checksums
+  find ./ -type f -not -name "*.md5" -exec md5sum {} \; > ${sample}_checksums.md5
+  # Move up to orig. working directory
+  cd ..
+
+done
+```
+
+## Broken into chunks
+
+```{r, engine = 'bash'}
+# Load bash variables into memory
+source .bashvars
+
+# Make output directories, if they don't exist
+mkdir --parents "${output_dir_align}"
+
+# Change to output directory
+cd "${output_dir_align}"
+
+# Create associative array with sample and timepoint
+metadata="../../metadata/mcap_RNAseq_simplified_metadata.csv"
+
+# Declare the associative array to store all the sample information
+declare -A sample_info_map
+
+# Read the metadata file line by line
+while IFS=',' read -r sample_no sample_name organism collection_date development_stage pvc_leachate_level hours_post_fertilization pvc_leachate_concentration_mg_L plate well sample_type sample_buffer; do
+    # Add the sample name as the key and the combined info as the value
+    sample_info_map["${sample_name}"]="${collection_date},${development_stage},${pvc_leachate_level},${hours_post_fertilization},${pvc_leachate_concentration_mg_L}"
+done < <(tail -n +2 "${metadata}") # Skip the header
+
+
+## Populate trimmed reads arrays
+fastq_array_R1=("${trimmed_fastqs_dir}"/${R1_fastq_pattern})
+fastq_array_R2=("${trimmed_fastqs_dir}"/${R2_fastq_pattern})
+
+```
+
+```{r, engine = 'bash'}
+
+# Load bash variables into memory
+source .bashvars
+
+# Change to output directory
+cd "${output_dir_align}"
+
+############## BEGIN HISAT2 ALIGNMENTS ##############
+for sample in "${!sample_info_map[@]}"
+do
+
+
+  # Create and switch to dedicated sample directory
+  mkdir --parents "${sample}" && cd "$_"
+
+  # Create HISAT2 list of fastq R1 files
+  # and generated MD5 checksums file.
+  for fastq in "${fastq_array_R1[@]}"
+  do
+    # Parse sample name from FastQ filename
+    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_]" '{print $1}')
+
+      # Generate checksum/list of input files used
+      md5sum "${fastq}" >> input_fastqs_checksums.md5
+
+      # Create comma-separated lists of FastQs for HISAT2
+      printf -v joined_R1 '%s,' "${fastq}"
+      fastq_list_R1=$(echo "${joined_R1%,}")
+  done
+
+  # Create HISAT2 list of fastq R1 files
+  # and generated MD5 checksums file.
+  for fastq in "${fastq_array_R2[@]}"
+  do
+    # Parse sample name from FastQ filename
+    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_]" '{print $1}')
+
+      # Generate checksum/list of input files used
+      md5sum "${fastq}" >> input_fastqs_checksums.md5
+
+      # Create comma-separated lists of FastQs for HISAT2
+      printf -v joined_R2 '%s,' "${fastq}"
+      fastq_list_R2=$(echo "${joined_R2%,}")
+  done
+```
+
+```{r, engine = 'bash'}
+# Load bash variables into memory
+source .bashvars
+
+# Change to output directory
+cd "${output_dir_align}"
+
+  # HISAT2 alignments
+  # Sets read group info (RG) using samples array
+  "${programs_array[hisat2]}" \
+  -x "${genome_index_name}" \
+  -1 "${fastq_list_R1}" \
+  -2 "${fastq_list_R2}" \
+  --threads "${threads}" \
+  --rg-id "${sample}" \
+  --rg "SM:""${sample_info_map[$sample]}" \
+  2> "${sample}"_hisat2.stats \
+  | tee >(${programs_array[samtools]} flagstat - > "${sample}"-hisat2_output.flagstat) \
+  | ${programs_array[samtools]} sort - -@ "${threads}" -O BAM \
+  | tee "${sample}".sorted.bam \
+  | ${programs_array[samtools]} index - "${sample}".sorted.bam.bai
+
+```
+
+```{r, engine = 'bash'}
+# Load bash variables into memory
+source .bashvars
+
+# Change to output directory
+cd "${output_dir_align}"
+
+  # Run stringtie on alignments
+  # Uses "-B" option to output tables intended for use in Ballgown
+  # Uses "-e" option; recommended when using "-B" option.
+  # Limits analysis to only reads alignments matching reference.
+  "${programs_array[stringtie]}" "${sample}".sorted.bam \
+  -p "${threads}" \
+  -o "${sample}".gtf \
+  -G "${genome_gff}" \
+  -C "${sample}.cov_refs.gtf" \
+  -B \
+  -e
+
+```
+
+```{r, engine = 'bash'}
+# Load bash variables into memory
+source .bashvars
+
+# Change to output directory
+cd "${output_dir_align}"
 
   # Add GTFs to list file, only if non-empty
   # Identifies GTF files that only have header

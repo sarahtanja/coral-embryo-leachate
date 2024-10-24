@@ -504,3 +504,9 @@
 /home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/789M4/789M4.gtf
 /home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/131415L4/131415L4.gtf
 /home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/123M4/123M4.gtf
+/home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/456L14/456L14.gtf
+/home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/89C14/89C14.gtf
+/home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/101112H14/101112H14.gtf
+/home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/131415L9/131415L9.gtf
+/home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/7C14/7C14.gtf
+/home/shared/8TB_HDD_02/stanja/sarahtanja/coral-embryo-leachate/output/04_align/123M9/123M9.gtf

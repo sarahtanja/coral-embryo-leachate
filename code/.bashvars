@@ -13,7 +13,7 @@ export raw_reads_dir=${project_dir}/rawfastq/00_fastq
 # Must keep variable name formatting, as it's used by HiSat2
 export HISAT2_INDEXES="${genome_index_dir}"
 # Input files
-export genome_index_name="Montipora_capitata_HIv3."
+export genome_index_name="Montipora_capitata_HIv3"
 export genome_gff="${genome_dir}/Montipora_capitata_HIv3.genes_fixed.gff3"
 export genome_fasta="${genome_dir}/Montipora_capitata_HIv3.assembly.fasta"
 export transcripts_gtf="${genome_dir}/Montipora_capitata_HIv3.genes.gtf"
