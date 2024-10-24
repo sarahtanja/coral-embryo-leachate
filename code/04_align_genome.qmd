@@ -3,7 +3,7 @@ title: "Step 4: Align sequences to annotated *M. capitata* genome"
 subtitle: "Using `HISAT2`"
 author: "Sarah Tanja"
 date: 10/21/2024
-format: 
+format:
   gfm: default  # or html if you want to render in HTML
 toc: true
 toc-depth: 3
@@ -21,7 +21,7 @@ execute:
 
 # 1 \| INTRODUCTION
 
-This notebook will align trimmed M. capitata RNA-seq data to the M. capitata genome using hierarchical indexing for spliced alignment of transcripts--3 nucleotides [HISAT-3N](https://daehwankimlab.github.io/hisat2/hisat-3n/){style="font-size: 11.4pt;"} [@zhang_rapid_2021]. Followed by StringTie (Pertea et al. 2016, 2015) for transcript assembly/identification and count matrices for downstream expression analysis with DESeq2.
+This notebook will align trimmed M. capitata RNA-seq data to the M. capitata genome using hierarchical indexing for spliced alignment of transcripts HISAT2 [@zhang_rapid_2021]. Followed by StringTie (Pertea et al. 2016, 2015) for transcript assembly/identification and count matrices for downstream expression analysis with DESeq2.
 
 Input(s)
 
@@ -75,7 +75,7 @@ cd mcapgenome
 # change to work in data genome folder
 cd ../data/mcapgenome
 
-# generate checksum for the genome assembly file 
+# generate checksum for the genome assembly file
 md5sum *assembly*
 
 ```
@@ -100,7 +100,7 @@ cd ../data/mcapgenome
 # change to work in data genome directory
 cd ../data/mcapgenome
 
-# generate checksum for the hisat index zip file 
+# generate checksum for the hisat index zip file
 md5sum *hisat2*
 ```
 
@@ -174,11 +174,11 @@ library(R.utils)
 
 ```{r}
 
-gff <- read.csv(file="../data/mcapgenome/Montipora_capitata_HIv3.genes.gff3", header=FALSE, sep="\t") 
+gff <- read.csv(file="../data/mcapgenome/Montipora_capitata_HIv3.genes.gff3", header=FALSE, sep="\t")
 
-gff_fixed <- read.csv(file="../data/mcapgenome/Montipora_capitata_HIv3.genes_fixed.gff3", header=FALSE, sep="\t") 
+gff_fixed <- read.csv(file="../data/mcapgenome/Montipora_capitata_HIv3.genes_fixed.gff3", header=FALSE, sep="\t")
 
-gtf <- 
+gtf <-
 ```
 
 # 3 \| Create a `bash` variables file
@@ -330,10 +330,7 @@ do
   for fastq in "${fastq_array_R1[@]}"
   do
     # Parse sample name from FastQ filename
-    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_-]" '{print $3}')
-
-    # Process matching FastQ file, based on sample name
-    if [ "${fastq_sample}" == "${sample}" ]; then
+    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_]" '{print $1}')
 
       # Generate checksum/list of input files used
       md5sum "${fastq}" >> input_fastqs_checksums.md5
@@ -341,7 +338,6 @@ do
       # Create comma-separated lists of FastQs for HISAT2
       printf -v joined_R1 '%s,' "${fastq}"
       fastq_list_R1=$(echo "${joined_R1%,}")
-    fi
   done
 
   # Create HISAT2 list of fastq R1 files
@@ -349,10 +345,7 @@ do
   for fastq in "${fastq_array_R2[@]}"
   do
     # Parse sample name from FastQ filename
-    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_-]" '{print $3}')
-
-    # Process matching FastQ file, based on sample name
-    if [ "${fastq_sample}" == "${sample}" ]; then
+    fastq_sample=$(echo "${fastq##*/}" | awk -F"[_]" '{print $1}')
 
       # Generate checksum/list of input files used
       md5sum "${fastq}" >> input_fastqs_checksums.md5
@@ -360,7 +353,6 @@ do
       # Create comma-separated lists of FastQs for HISAT2
       printf -v joined_R2 '%s,' "${fastq}"
       fastq_list_R2=$(echo "${joined_R2%,}")
-    fi
   done
 
 
@@ -407,11 +399,4 @@ do
   cd ..
 
 done
-```
-
-```{r, engine = 'bash'}
-cd ../data/mcapgenome
-
-head Montipora_capitata_HIv3.assembly.fasta
-
 ```

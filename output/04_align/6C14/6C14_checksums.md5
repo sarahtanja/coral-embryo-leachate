@@ -1,7 +1,8 @@
 d41d8cd98f00b204e9800998ecf8427e  ./6C14.cov_refs.gtf
 d41d8cd98f00b204e9800998ecf8427e  ./6C14.sorted.bam
 545698330a6c55db74933b2c5f7bca63  ./i_data.ctab
-aa75ba89f4ebd877e83a7f592aa48cea  ./6C14_hisat2.stats
+d41d8cd98f00b204e9800998ecf8427e  ./gastrula,control,14,0
+a00585076be2d0c300897ae53af7ce86  ./6C14_hisat2.stats
 6d1203b48bf9a726d271275f1afa09cb  ./i2t.ctab
 a2e320732379fa7fed6b82a920b94fca  ./e_data.ctab
 b8d6def1a562903098c8e71931cd6aa5  ./6C14.gtf

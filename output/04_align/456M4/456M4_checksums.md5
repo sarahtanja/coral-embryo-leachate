@@ -5,6 +5,6 @@ d41d8cd98f00b204e9800998ecf8427e  ./456M4-hisat2_output.flagstat
 6d1203b48bf9a726d271275f1afa09cb  ./i2t.ctab
 d41d8cd98f00b204e9800998ecf8427e  ./456M4.cov_refs.gtf
 a2e320732379fa7fed6b82a920b94fca  ./e_data.ctab
-34351a7f96b90f5730310299908a0953  ./456M4_hisat2.stats
+f3ad743bf4d603bfcff8bbcf4bb9288e  ./456M4_hisat2.stats
 2c132089ce24f387180f00ee27fe4205  ./t_data.ctab
 c935344db0ed72312286985d4fb31b80  ./e2t.ctab

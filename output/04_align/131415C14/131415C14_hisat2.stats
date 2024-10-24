@@ -1,6 +1,9 @@
-Warning: Could not open read file "gastrula" for reading; skipping...
-Warning: Could not open read file "control" for reading; skipping...
-Warning: Could not open read file "14" for reading; skipping...
-Warning: Could not open read file "0" for reading; skipping...
-Error: No input read files were valid
+Warning: Output file 'gastrula,control,14,0' was specified without -S.  This will not work in future HISAT 2 versions.  Please use -S instead.
+Could not locate a HISAT2 index corresponding to basename "Montipora_capitata_HIv3."
+Error: Encountered internal HISAT2 exception (#1)
+Command: /home/shared/hisat2-2.2.1/hisat2-align-s --wrapper basic-0 -x Montipora_capitata_HIv3. --threads 40 --rg-id 131415C14 --rg SM:08-Jul-2024,early --read-lengths 150,141,140,136,145,137,147,143,134,142,133,130,149,148,146,128,138,135,144,139,131,121,132,127,129,125,124,116,123,115,114,122,119,113,108,120,112,126,118,109,106,117,111,101,107,99,105,93,110,103,98,97,94,100,96,79,90,104,87,82,95,92,91,76,89,88,86,81,58,53,40,36,102,83,80,75,69,60,55,47,44,85,84,77,74,73,72,70,68,65,64,62,59,57,56,52,42,38,33,31 -1 /tmp/27123.inpipe1 -2 /tmp/27123.inpipe2 gastrula,control,14,0 
 (ERR): hisat2-align exited with value 1
+
+gzip: stdout: Broken pipe
+
+gzip: stdout: Broken pipe

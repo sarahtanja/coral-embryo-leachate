@@ -1,5 +1,5 @@
 d41d8cd98f00b204e9800998ecf8427e  ./45H14-hisat2_output.flagstat
-dfb62dfcddb37ba719c4b4bf4296ab85  ./45H14_hisat2.stats
+bce382212732a219e439e2c3b1a9f489  ./45H14_hisat2.stats
 545698330a6c55db74933b2c5f7bca63  ./i_data.ctab
 d41d8cd98f00b204e9800998ecf8427e  ./45H14.cov_refs.gtf
 6d1203b48bf9a726d271275f1afa09cb  ./i2t.ctab
@@ -8,3 +8,4 @@ a2e320732379fa7fed6b82a920b94fca  ./e_data.ctab
 d41d8cd98f00b204e9800998ecf8427e  ./45H14.sorted.bam
 2c132089ce24f387180f00ee27fe4205  ./t_data.ctab
 c935344db0ed72312286985d4fb31b80  ./e2t.ctab
+d41d8cd98f00b204e9800998ecf8427e  ./gastrula,high,14,1

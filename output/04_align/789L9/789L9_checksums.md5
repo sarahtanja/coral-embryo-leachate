@@ -1,9 +1,10 @@
-793fad3e8f2028da5d22b681e41c26a1  ./789L9_hisat2.stats
+6fef1e1fa1df9ddf4ed9a70ef8d888e7  ./789L9_hisat2.stats
 d41d8cd98f00b204e9800998ecf8427e  ./789L9.cov_refs.gtf
 d41d8cd98f00b204e9800998ecf8427e  ./789L9.sorted.bam
 d41d8cd98f00b204e9800998ecf8427e  ./789L9-hisat2_output.flagstat
 0aa1f251336e97b521805695943c1e00  ./789L9.gtf
 545698330a6c55db74933b2c5f7bca63  ./i_data.ctab
+d41d8cd98f00b204e9800998ecf8427e  ./chip,low,9,0.01
 6d1203b48bf9a726d271275f1afa09cb  ./i2t.ctab
 a2e320732379fa7fed6b82a920b94fca  ./e_data.ctab
 2c132089ce24f387180f00ee27fe4205  ./t_data.ctab

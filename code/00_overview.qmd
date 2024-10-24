@@ -114,7 +114,7 @@ Great example of previous HISAT2 RNA-seq alignment in Sam White's notebook [here
 :::
 
 -   Obtain reference genome assembly & GFF annotation file
-    -   Genome [Version 3](http://cyanophora.rutgers.edu/montipora/) [@stephens2022]
+    -   Genome [Version 3](http://cyanophora.rutgers.edu/montipora/) from Rutgers [@stephens2022]
     -   [GFF](http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.genes.gff3.gz) from Rutgers (or [GFF fixed](https://github.com/AHuffmyer/EarlyLifeHistory_Energetics/raw/master/Mcap2020/Data/TagSeq/Montipora_capitata_HIv3.genes_fixed.gff3.gz) from AHuffmyer?)
     -   [genomes, indexes, & feature tracks](https://robertslab.github.io/resources/Genomic-Resources/#montipora-capitata) from Roberts Lab Handbook
 -   Align sequences to genome

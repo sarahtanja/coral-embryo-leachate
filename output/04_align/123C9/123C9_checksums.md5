@@ -1,5 +1,6 @@
+d41d8cd98f00b204e9800998ecf8427e  ./chip,control,9,0
 d41d8cd98f00b204e9800998ecf8427e  ./123C9.sorted.bam
-ac9251d901f3f96d06d100bdb467084d  ./123C9_hisat2.stats
+a00ba3cdd563ae2c38c38d05f05909b8  ./123C9_hisat2.stats
 d41d8cd98f00b204e9800998ecf8427e  ./123C9.cov_refs.gtf
 d2f7884146d5e0316f16e75faf80f9d4  ./123C9.gtf
 545698330a6c55db74933b2c5f7bca63  ./i_data.ctab

@@ -1,3 +1,4 @@
+d41d8cd98f00b204e9800998ecf8427e  ./chip,high,9,1
 d41d8cd98f00b204e9800998ecf8427e  ./123H9.sorted.bam
 d41d8cd98f00b204e9800998ecf8427e  ./123H9-hisat2_output.flagstat
 df0e49bc36664d108d0260d12dce1e5e  ./123H9.gtf
@@ -7,4 +8,4 @@ a2e320732379fa7fed6b82a920b94fca  ./e_data.ctab
 2c132089ce24f387180f00ee27fe4205  ./t_data.ctab
 d41d8cd98f00b204e9800998ecf8427e  ./123H9.cov_refs.gtf
 c935344db0ed72312286985d4fb31b80  ./e2t.ctab
-1f25549ee4e8d1ec7f72ffd7f29cb951  ./123H9_hisat2.stats
+fd5cd059b7fb0913dfa1c50d3908dbce  ./123H9_hisat2.stats

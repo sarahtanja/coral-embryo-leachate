@@ -1,6 +1,9 @@
-Warning: Could not open read file "chip" for reading; skipping...
-Warning: Could not open read file "high" for reading; skipping...
-Warning: Could not open read file "9" for reading; skipping...
-Warning: Could not open read file "1" for reading; skipping...
-Error: No input read files were valid
+Warning: Output file 'chip,high,9,1' was specified without -S.  This will not work in future HISAT 2 versions.  Please use -S instead.
+Could not locate a HISAT2 index corresponding to basename "Montipora_capitata_HIv3."
+Error: Encountered internal HISAT2 exception (#1)
+Command: /home/shared/hisat2-2.2.1/hisat2-align-s --wrapper basic-0 -x Montipora_capitata_HIv3. --threads 40 --rg-id 456H9 --rg SM:07-Jul-2024,prawn --read-lengths 150,141,140,137,145,143,138,134,142,148,130,132,127,136,135,131,149,147,146,139,124,118,116,133,123,115,144,102,121,122,119,32,126,117,114,108,107,97,129,128,105,113,125,112,101,98,95,68,33,120,111,104,100,87,72,65,56,49,47,110,109,106,96,92,91,86,83,80,66,61,54,53,46,40,103,90,88,85,81,77,71,69,59,41,37,35,34 -1 /tmp/28643.inpipe1 -2 /tmp/28643.inpipe2 chip,high,9,1 
 (ERR): hisat2-align exited with value 1
+
+gzip: stdout: Broken pipe
+
+gzip: stdout: Broken pipe

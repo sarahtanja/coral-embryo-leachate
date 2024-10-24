@@ -1,3 +1,4 @@
+d41d8cd98f00b204e9800998ecf8427e  ./chip,control,9,0
 22b37fe49bf9d3a1d7bf8fe16427a39f  ./45C9.gtf
 d41d8cd98f00b204e9800998ecf8427e  ./45C9.sorted.bam
 545698330a6c55db74933b2c5f7bca63  ./i_data.ctab
@@ -7,4 +8,4 @@ a2e320732379fa7fed6b82a920b94fca  ./e_data.ctab
 2c132089ce24f387180f00ee27fe4205  ./t_data.ctab
 c935344db0ed72312286985d4fb31b80  ./e2t.ctab
 d41d8cd98f00b204e9800998ecf8427e  ./45C9-hisat2_output.flagstat
-ac9251d901f3f96d06d100bdb467084d  ./45C9_hisat2.stats
+fc235aa8131c08dba32c82d867e8b7d0  ./45C9_hisat2.stats

@@ -1,5 +1,6 @@
+d41d8cd98f00b204e9800998ecf8427e  ./chip,control,9,0
 d41d8cd98f00b204e9800998ecf8427e  ./89C9-hisat2_output.flagstat
-ac9251d901f3f96d06d100bdb467084d  ./89C9_hisat2.stats
+9c1185958eeeee219c64d18a0468d590  ./89C9_hisat2.stats
 545698330a6c55db74933b2c5f7bca63  ./i_data.ctab
 d41d8cd98f00b204e9800998ecf8427e  ./89C9.sorted.bam
 6d1203b48bf9a726d271275f1afa09cb  ./i2t.ctab

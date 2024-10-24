@@ -270,3 +270,11 @@
 ./data/mcapgenome/Montipora_capitata_HIv3.1.ht2
 ./data/mcapgenome/Montipora_capitata_HIv3.5.ht2
 ./data/mcapgenome/Montipora_capitata_HIv3-hisat2-indices.tar.gz
+./data/mcapgenome/hisat-index/Montipora_capitata_HIv3.6.ht2
+./data/mcapgenome/hisat-index/Montipora_capitata_HIv3.4.ht2
+./data/mcapgenome/hisat-index/Montipora_capitata_HIv3.2.ht2
+./data/mcapgenome/hisat-index/Montipora_capitata_HIv3.1.ht2
+./data/mcapgenome/hisat-index/Montipora_capitata_HIv3.5.ht2
+./data/mcapgenome/Montipora_capitata_HIv3.genes.gtf.1
+./data/mcapgenome/Montipora_capitata_HIv3.assembly.fasta.gz.1
+./.Rproj.user/shared/notebooks/ACE1D5B3-04_align_genome/1/s/cic1in8dedkq0/000011.csv
