@@ -11,12 +11,6 @@ link-external-icon: true
 link-external-newwindow: true
 reference-location: margin
 citation-location: margin
-execute:
-  cache: true
-  eval: true
-  echo: true
-  warning: false
-  message: false
 ---
 
 # 1 \| INTRODUCTION
