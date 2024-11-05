@@ -13,7 +13,7 @@ reference-location: margin
 citation-location: margin
 ---
 
-# 1 \| INTRODUCTION
+# 1 INTRODUCTION
 
 This notebook will align trimmed M. capitata RNA-seq data to the M. capitata genome using hierarchical indexing for spliced alignment of transcripts HISAT2 [@zhang_rapid_2021]. Followed by StringTie (Pertea et al. 2016, 2015) for transcript assembly/identification and count matrices for downstream expression analysis with DESeq2.
 
