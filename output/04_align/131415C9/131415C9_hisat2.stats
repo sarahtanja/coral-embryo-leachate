@@ -1,1 +1,0 @@
-Warning: Output file 'chip,control' was specified without -S.  This will not work in future HISAT 2 versions.  Please use -S instead.

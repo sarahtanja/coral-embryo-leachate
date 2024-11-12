@@ -1,8 +1,0 @@
-Could not locate a HISAT2 index corresponding to basename "Montipora_capitata_HIv3."
-Error: Encountered internal HISAT2 exception (#1)
-Command: /home/shared/hisat2-2.2.1/hisat2-align-s --wrapper basic-0 -x Montipora_capitata_HIv3. --threads 40 --rg-id 123L4 --rg SM:06-Jul-2024,cleavage,low,4,0.01 --read-lengths 150,141,145,140,149,143,137,148,139,147,144,126,146,129,142,138,136,133,127,134,135,131,130,124,119,132,117,122,116,118,123,114,128,125,120,112,121,113,111,115,103,108,109,98,106,107,105,104,102,64,110,94,101,97,92,100,96,84,81,66,93,88,87,82,79,95,91,90,85,83,80,77,72,71,67,63,58,45,42,33,99,86,78,75,73,69,59,55,53,51,49,46,89,76,70,68,65,60,57,50,43,37,35,34,25 -1 /tmp/27635.inpipe1 -2 /tmp/27635.inpipe2 
-(ERR): hisat2-align exited with value 1
-
-gzip: stdout: Broken pipe
-
-gzip: stdout: Broken pipe

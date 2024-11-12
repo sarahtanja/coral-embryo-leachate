@@ -1,9 +1,0 @@
-Warning: Output file 'chip,mid,9,0.1' was specified without -S.  This will not work in future HISAT 2 versions.  Please use -S instead.
-Could not locate a HISAT2 index corresponding to basename "Montipora_capitata_HIv3."
-Error: Encountered internal HISAT2 exception (#1)
-Command: /home/shared/hisat2-2.2.1/hisat2-align-s --wrapper basic-0 -x Montipora_capitata_HIv3. --threads 40 --rg-id 101112M9 --rg SM:08-Jul-2024,prawn --read-lengths 150,142,133,128,148,138,137,126,144,136,141,140,132,149,123,139,127,145,129,113,118,147,134,131,135,121,117,143,125,124,116,130,122,115,114,112,120,119,146,110,107,106,111,108,109,105,103,102,99,101,95,104,100,98,97,93,92,91,96,87,90,86,94,88,83,82,79,74,89,85,78,84,75,68,81,77,76,67,66,43,80,71,62,50,48,65,58,46,44,42,36,31,73,69,63,61,59,57,56,54,53,52,45,41,38,33,32,17 -1 /tmp/34220.inpipe1 -2 /tmp/34220.inpipe2 chip,mid,9,0.1 
-(ERR): hisat2-align exited with value 1
-
-gzip: stdout: Broken pipe
-
-gzip: stdout: Broken pipe
